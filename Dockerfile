@@ -27,27 +27,18 @@ RUN apt-get -y install libopencv-dev build-essential cmake git libgtk2.0-dev pkg
 
 # Install JDK
 RUN apt-get -y install openjdk-7-jdk
+RUN apt-get -y install ant 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/
 ENV PATH $JAVA_HOME/bin:$PATH
 
 
-#Download OpenCV
-#RUN mkdir /root/opencv
+WORKDIR /root
 
-RUN git clone https://github.com/Itseez/opencv.git
-WORKDIR /root/opencv
-RUN git checkout tags/3.0.0
-
-
-# Install OPENCV
-RUN mkdir build
-WORKDIR /root/opencv/build
-RUN cmake -DBUILD_SHARED_LIBS=OFF ..
-RUN make -j $(nproc)
-RUN make install
-
+COPY opencv3_0_0_java.sh /root/
+RUN sh opencv3_0_0_java.sh
+ 
 
 WORKDIR /root
-COPY run.sh /root/
-CMD ["sh", "run.sh"]
+#COPY run.sh /root/
+#CMD ["sh", "run.sh"]
 
